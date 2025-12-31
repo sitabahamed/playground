@@ -1,148 +1,191 @@
-# CalorieTracker - React Native Fitness App
+# AI Content Orchestrator
 
-A comprehensive calorie and macro tracking app built with React Native and Expo.
+Advanced SEO Content Generation Platform that orchestrates multiple AI models (OpenAI GPT-4, Anthropic Claude, Google Gemini, and Perplexity) to generate high-quality, SEO-optimized blog articles.
 
 ## Features
 
-### Core Functionality
-- **Daily Calorie Tracking**: Track your daily calorie intake with a visual progress ring
-- **Macro Tracking**: Monitor protein, carbs, and fats with progress bars
-- **Meal Categorization**: Organize foods by breakfast, lunch, dinner, and snacks
-- **Food Database**: Pre-populated with 25+ common foods
-- **Custom Foods**: Create and save your own food items
-- **History**: View past daily logs with complete nutrition information
-- **Goal Setting**: Customize your daily calorie and macro goals
+- **Multi-AI Orchestration**: Leverages the best of each AI model
+  - GPT-4 for creative writing
+  - Claude for SEO optimization and quality checks
+  - Gemini for search intent analysis
+  - Perplexity for factual research and citations
 
-### User Interface
-- Clean, modern design with intuitive navigation
-- Bottom tab navigation for easy access to main features
-- Pull-to-refresh on dashboard and history screens
-- Real-time progress visualization
-- Category-based food search
+- **5-Step Article Generation Wizard**:
+  1. Keyword input
+  2. Research & analysis (auto-runs)
+  3. Outline review & editing
+  4. Settings configuration
+  5. Content generation with live progress
+
+- **SEO-Optimized Content**: Publish-ready articles with proper structure, meta tags, FAQs, and keyword optimization
+
+- **Batch Processing**: Scale content creation by processing multiple articles with consistent quality
+
+- **Project Management**: Organize articles by projects with custom brand voice
+
+- **Real-time Progress Tracking**: Monitor generation status with live updates
 
 ## Tech Stack
 
-- **Framework**: React Native with Expo
-- **Navigation**: React Navigation (Bottom Tabs + Stack Navigator)
-- **Storage**: AsyncStorage for persistent local data
-- **State Management**: React Hooks (useState, useEffect, useFocusEffect)
+### Frontend
+- Next.js 14 with App Router
+- React 18+ with TypeScript
+- Tailwind CSS + Shadcn/ui components
+- React Query for state management
+- Zustand for global state
 
-## Project Structure
+### Backend
+- Next.js API Routes
+- Supabase (PostgreSQL + Auth)
+- Server-Sent Events for real-time updates
 
-```
-calorie-tracker/
-├── src/
-│   ├── components/          # Reusable UI components
-│   │   ├── FoodItem.js      # Food entry display
-│   │   ├── MacroBar.js      # Macro progress bar
-│   │   └── ProgressRing.js  # Calorie progress ring
-│   ├── data/                # Static data
-│   │   └── foodDatabase.js  # Food database with 25+ items
-│   ├── navigation/          # Navigation configuration
-│   │   └── AppNavigator.js  # Main navigation setup
-│   ├── screens/             # App screens
-│   │   ├── DashboardScreen.js    # Main tracking screen
-│   │   ├── AddFoodScreen.js      # Food search/selection
-│   │   ├── CustomFoodScreen.js   # Custom food creation
-│   │   ├── HistoryScreen.js      # Past logs
-│   │   └── SettingsScreen.js     # Goal management
-│   └── utils/               # Helper functions
-│       ├── storage.js       # AsyncStorage wrapper
-│       └── calculations.js  # Nutrition calculations
-├── App.js                   # Main app component
-└── package.json
-```
+### AI Integrations
+- OpenAI API (GPT-4/GPT-4o)
+- Anthropic API (Claude 3.5 Sonnet)
+- Google Gemini API (Gemini 1.5 Pro)
+- Perplexity API
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
-- Expo CLI (optional)
+
+- Node.js 18+ and npm
+- Supabase account
+- API keys for AI providers (users provide their own)
 
 ### Installation
 
-1. Install dependencies:
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd ai-content-orchestrator
+```
+
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-2. Start the development server:
+3. Set up environment variables:
 ```bash
-npm start
+cp .env.local.example .env.local
 ```
 
-3. Run on your platform:
+Edit `.env.local` and add your Supabase credentials and encryption key.
+
+4. Set up the Supabase database:
+   - Create a new Supabase project
+   - Run the SQL schema from `supabase/schema.sql`
+   - Configure authentication providers
+
+5. Run the development server:
 ```bash
-npm run android  # For Android
-npm run ios      # For iOS (requires macOS)
-npm run web      # For web browser
+npm run dev
 ```
 
-### Using Expo Go
-1. Install Expo Go on your mobile device
-2. Scan the QR code from the terminal
-3. The app will load on your device
+6. Open [http://localhost:3000](http://localhost:3000)
+
+## Project Structure
+
+```
+ai-content-orchestrator/
+├── app/                      # Next.js app directory
+│   ├── (auth)/              # Authentication pages
+│   │   ├── login/
+│   │   └── register/
+│   ├── (dashboard)/         # Protected dashboard pages
+│   │   ├── dashboard/
+│   │   ├── articles/
+│   │   ├── batch/
+│   │   └── settings/
+│   ├── api/                 # API routes
+│   │   ├── auth/
+│   │   ├── articles/
+│   │   ├── generate/
+│   │   └── settings/
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/              # React components
+│   ├── ui/                 # Shadcn/ui components
+│   ├── article/            # Article-related components
+│   ├── dashboard/          # Dashboard components
+│   └── providers.tsx
+├── lib/                    # Utilities and configurations
+│   ├── supabase/          # Supabase client
+│   ├── ai/                # AI provider integrations
+│   └── utils.ts
+├── types/                  # TypeScript type definitions
+├── hooks/                  # Custom React hooks
+└── utils/                  # Helper functions
+```
 
 ## Usage
 
-### Setting Up Goals
-1. Navigate to the Settings tab
-2. Enter your daily goals:
-   - Calorie target (default: 2000 kcal)
-   - Protein goal (default: 150g)
-   - Carbs goal (default: 200g)
-   - Fats goal (default: 65g)
-3. Tap "Save Goals"
+### Setting Up API Keys
 
-### Logging Food
-1. On the Dashboard, tap "+ Add Food" under any meal
-2. Search for foods or browse by category
-3. Tap a food to add it to your log
-4. Or create a custom food with your own nutritional values
+1. Navigate to Settings > API Configuration
+2. Add your API keys for each AI provider
+3. Test connections to verify
 
-### Viewing Progress
-- The main dashboard shows:
-  - Calorie progress ring
-  - Macro progress bars
-  - Foods organized by meal
-  - Total calories per meal
+### Creating an Article
 
-### Checking History
-- Navigate to the History tab
-- View all past daily logs
-- See calorie totals and macro breakdowns
-- Track your progress over time
+1. Click "New Article" from the dashboard
+2. Enter your target keyword
+3. Review the auto-generated research and outline
+4. Configure settings (tone, word count, formatting)
+5. Generate and review the content
+6. Export or publish
 
-## Food Database
+### Batch Generation
 
-The app includes 25+ common foods across categories:
-- **Protein**: Chicken, salmon, eggs, tuna
-- **Carbs**: Rice, pasta, oats, bread, sweet potato
-- **Vegetables**: Broccoli, spinach, carrots, tomato
-- **Fruits**: Banana, apple, strawberries, blueberries
-- **Dairy**: Milk, cheese, Greek yogurt
-- **Snacks**: Almonds, peanut butter, protein bars
-- **Beverages**: Protein shake, black coffee
+1. Navigate to Batch section
+2. Enter multiple keywords (or upload CSV)
+3. Configure shared settings
+4. Monitor progress for all articles
 
-## Future Enhancements
+## Environment Variables
 
-Potential features for future versions:
-- [ ] Barcode scanner for packaged foods
-- [ ] Water intake tracking widget
-- [ ] Weekly/monthly analytics with charts
-- [ ] Export data to CSV
-- [ ] Cloud sync across devices
-- [ ] Meal planning and recipes
-- [ ] Weight tracking integration
-- [ ] Integration with fitness trackers
-- [ ] Photo logging for meals
-- [ ] Favorite foods quick access
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=        # Your Supabase project URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=   # Your Supabase anon key
+
+# Encryption
+ENCRYPTION_KEY=                   # 32-byte hex key for API key encryption
+```
+
+## Database Schema
+
+See `docs/database-schema.md` for complete database documentation.
+
+Key tables:
+- `users` - User accounts
+- `api_keys` - Encrypted API keys per user
+- `projects` - Content organization
+- `articles` - Generated articles with metadata
+- `batch_jobs` - Batch processing jobs
+
+## API Routes
+
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `GET /api/articles` - List articles
+- `POST /api/articles` - Create new article
+- `POST /api/generate/start` - Start generation pipeline
+- `GET /api/generate/stream/:jobId` - SSE progress updates
+
+See `docs/api-reference.md` for complete API documentation.
 
 ## Contributing
 
-Feel free to fork this project and submit pull requests for improvements!
+Contributions are welcome! Please read the contributing guidelines before submitting PRs.
 
 ## License
 
-MIT License
+MIT License - see LICENSE file for details
+
+## Support
+
+For issues and questions:
+- GitHub Issues: [repository-url]/issues
+- Documentation: [docs-url]
