@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PNG to WebP Converter</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: #94a3b8;
+      margin-bottom: 32px;
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 640px;
+    }
+
+    /* Drop zone */
+    #drop-zone {
+      border: 2px dashed #475569;
+      border-radius: 12px;
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    #drop-zone.drag-over {
+      border-color: #38bdf8;
+      background: rgba(56, 189, 248, 0.06);
+    }
+
+    #drop-zone svg { margin-bottom: 12px; opacity: 0.6; }
+
+    #drop-zone p { color: #94a3b8; font-size: 0.9rem; }
+    #drop-zone p strong { color: #cbd5e1; }
+
+    #file-input { display: none; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: #38bdf8; color: #0f172a; }
+    .btn-success { background: #22c55e; color: #fff; }
+    .btn-ghost {
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid #334155;
+    }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* Controls */
+    .controls {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .controls.visible { display: flex; }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    label { font-size: 0.875rem; color: #cbd5e1; }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      flex: 1;
+      height: 4px;
+      background: #334155;
+      border-radius: 4px;
+      outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: #38bdf8;
+      cursor: pointer;
+    }
+
+    .value-badge {
+      min-width: 40px;
+      text-align: center;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #38bdf8;
+    }
+
+    /* File list */
+    #file-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+
+    .file-thumb {
+      width: 40px; height: 40px;
+      object-fit: cover;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .file-info { flex: 1; min-width: 0; }
+    .file-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .file-meta { font-size: 0.72rem; color: #64748b; margin-top: 2px; }
+
+    .file-status {
+      font-size: 0.75rem;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .file-status.pending  { color: #64748b; }
+    .file-status.done     { color: #22c55e; }
+    .file-status.error    { color: #f87171; }
+
+    /* Action row */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    /* Progress */
+    #progress-bar-wrap {
+      display: none;
+      background: #0f172a;
+      border-radius: 8px;
+      height: 6px;
+      overflow: hidden;
+    }
+    #progress-bar-wrap.visible { display: block; }
+    #progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8);
+      transition: width 0.2s;
+      width: 0%;
+    }
+  </style>
+</head>
+<body>
+
+<h1>PNG → WebP Converter</h1>
+<p class="subtitle">Convert images entirely in your browser — nothing is uploaded.</p>
+
+<div class="card">
+  <!-- Drop zone -->
+  <div id="drop-zone">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="1.5">
+      <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 12V4m0 0L8 8m4-4l4 4"/>
+    </svg>
+    <p><strong>Drop PNG files here</strong></p>
+    <p style="margin-top:6px">or</p>
+    <button class="btn btn-primary" style="margin-top:12px" onclick="document.getElementById('file-input').click()">
+      Browse files
+    </button>
+    <input type="file" id="file-input" accept="image/png" multiple />
+  </div>
+
+  <!-- Controls -->
+  <div class="controls" id="controls">
+    <div id="file-list"></div>
+
+    <div id="progress-bar-wrap">
+      <div id="progress-bar"></div>
+    </div>
+
+    <div class="control-row">
+      <label for="quality-slider">Quality</label>
+      <input type="range" id="quality-slider" min="10" max="100" value="85" />
+      <span class="value-badge" id="quality-value">85</span>
+    </div>
+
+    <div class="action-row">
+      <button class="btn btn-ghost" id="clear-btn">Clear</button>
+      <button class="btn btn-primary" id="convert-btn">Convert all</button>
+      <button class="btn btn-success" id="download-btn" style="display:none">Download all</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const dropZone    = document.getElementById('drop-zone');
+  const fileInput   = document.getElementById('file-input');
+  const controls    = document.getElementById('controls');
+  const fileList    = document.getElementById('file-list');
+  const qualitySlider = document.getElementById('quality-slider');
+  const qualityValue  = document.getElementById('quality-value');
+  const convertBtn  = document.getElementById('convert-btn');
+  const downloadBtn = document.getElementById('download-btn');
+  const clearBtn    = document.getElementById('clear-btn');
+  const progressWrap = document.getElementById('progress-bar-wrap');
+  const progressBar  = document.getElementById('progress-bar');
+
+  let files = [];   // { file, objectUrl, webpBlob, el }
+
+  // Quality slider
+  qualitySlider.addEventListener('input', () => {
+    qualityValue.textContent = qualitySlider.value;
+  });
+
+  // Drag & drop
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    addFiles([...e.dataTransfer.files].filter(f => f.type === 'image/png'));
+  });
+
+  fileInput.addEventListener('change', () => {
+    addFiles([...fileInput.files]);
+    fileInput.value = '';
+  });
+
+  function formatBytes(n) {
+    if (n < 1024) return n + ' B';
+    if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+    return (n / 1024 / 1024).toFixed(2) + ' MB';
+  }
+
+  function addFiles(newFiles) {
+    if (!newFiles.length) return;
+    newFiles.forEach(f => {
+      const objectUrl = URL.createObjectURL(f);
+      const entry = { file: f, objectUrl, webpBlob: null, el: null };
+      files.push(entry);
+
+      const item = document.createElement('div');
+      item.className = 'file-item';
+      item.innerHTML = `
+        <img class="file-thumb" src="${objectUrl}" alt="" />
+        <div class="file-info">
+          <div class="file-name">${f.name}</div>
+          <div class="file-meta">${formatBytes(f.size)}</div>
+        </div>
+        <span class="file-status pending">Pending</span>
+      `;
+      entry.el = item;
+      fileList.appendChild(item);
+    });
+
+    controls.classList.add('visible');
+    downloadBtn.style.display = 'none';
+  }
+
+  clearBtn.addEventListener('click', () => {
+    files.forEach(e => URL.revokeObjectURL(e.objectUrl));
+    files = [];
+    fileList.innerHTML = '';
+    controls.classList.remove('visible');
+    downloadBtn.style.display = 'none';
+    progressWrap.classList.remove('visible');
+    progressBar.style.width = '0%';
+  });
+
+  convertBtn.addEventListener('click', async () => {
+    if (!files.length) return;
+    const quality = Number(qualitySlider.value) / 100;
+
+    convertBtn.disabled = true;
+    clearBtn.disabled = true;
+    progressWrap.classList.add('visible');
+    progressBar.style.width = '0%';
+
+    let done = 0;
+    for (const entry of files) {
+      const statusEl = entry.el.querySelector('.file-status');
+      statusEl.textContent = 'Converting…';
+      statusEl.className = 'file-status pending';
+
+      try {
+        entry.webpBlob = await pngToWebP(entry.file, quality);
+
+        const savings = (1 - entry.webpBlob.size / entry.file.size) * 100;
+        const meta = entry.el.querySelector('.file-meta');
+        meta.textContent = `${formatBytes(entry.file.size)} → ${formatBytes(entry.webpBlob.size)} (${savings > 0 ? '-' : '+'}${Math.abs(savings).toFixed(1)}%)`;
+
+        statusEl.textContent = 'Done';
+        statusEl.className = 'file-status done';
+      } catch (err) {
+        statusEl.textContent = 'Error';
+        statusEl.className = 'file-status error';
+      }
+
+      done++;
+      progressBar.style.width = `${(done / files.length) * 100}%`;
+    }
+
+    convertBtn.disabled = false;
+    clearBtn.disabled = false;
+
+    const anyDone = files.some(e => e.webpBlob);
+    if (anyDone) downloadBtn.style.display = 'inline-flex';
+  });
+
+  function pngToWebP(file, quality) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width  = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        canvas.getContext('2d').drawImage(img, 0, 0);
+        canvas.toBlob(blob => {
+          if (blob) resolve(blob);
+          else reject(new Error('Conversion failed'));
+        }, 'image/webp', quality);
+      };
+      img.onerror = reject;
+      img.src = URL.createObjectURL(file);
+    });
+  }
+
+  downloadBtn.addEventListener('click', async () => {
+    const ready = files.filter(e => e.webpBlob);
+    if (ready.length === 1) {
+      triggerDownload(ready[0]);
+      return;
+    }
+
+    // Multiple files — use JSZip if available, else download one by one
+    if (typeof JSZip !== 'undefined') {
+      const zip = new JSZip();
+      ready.forEach(e => {
+        const name = e.file.name.replace(/\.png$/i, '.webp');
+        zip.file(name, e.webpBlob);
+      });
+      const blob = await zip.generateAsync({ type: 'blob' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'converted.zip';
+      a.click();
+    } else {
+      ready.forEach(triggerDownload);
+    }
+  });
+
+  function triggerDownload(entry) {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(entry.webpBlob);
+    a.download = entry.file.name.replace(/\.png$/i, '.webp');
+    a.click();
+  }
+</script>
+
+<!-- Optional: JSZip for bundled download -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+</body>
+</html>
