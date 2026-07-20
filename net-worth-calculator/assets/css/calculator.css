@@ -1,0 +1,478 @@
+:root {
+    --nwc-primary: #2563eb;
+    --nwc-success: #10b981;
+    --nwc-danger: #ef4444;
+    --nwc-warning: #f59e0b;
+    --nwc-light-bg: #f9fafb;
+    --nwc-border-color: #e5e7eb;
+    --nwc-text-dark: #1f2937;
+    --nwc-text-light: #6b7280;
+    --nwc-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --nwc-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.nwc-calculator-wrapper {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 40px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+.nwc-header {
+    text-align: center;
+    color: white;
+    margin-bottom: 40px;
+    animation: slideDown 0.6s ease-out;
+}
+
+.nwc-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.nwc-icon {
+    font-size: 3rem;
+    animation: bounce 2s infinite;
+}
+
+.nwc-subtitle {
+    font-size: 1.1rem;
+    opacity: 0.95;
+    margin-bottom: 0;
+}
+
+.nwc-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.6s ease-out;
+}
+
+/* Sections */
+.nwc-section {
+    background: var(--nwc-light-bg);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 30px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.nwc-assets-section {
+    border-color: #dbeafe;
+}
+
+.nwc-assets-section:hover {
+    border-color: var(--nwc-primary);
+    background: rgba(37, 99, 235, 0.02);
+}
+
+.nwc-liabilities-section {
+    border-color: #fee2e2;
+}
+
+.nwc-liabilities-section:hover {
+    border-color: var(--nwc-danger);
+    background: rgba(239, 68, 68, 0.02);
+}
+
+.nwc-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--nwc-border-color);
+}
+
+.nwc-section-header h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--nwc-text-dark);
+}
+
+.nwc-badge {
+    font-size: 1.8rem;
+}
+
+.nwc-section-total {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--nwc-primary);
+}
+
+.nwc-liabilities-section .nwc-section-total {
+    color: var(--nwc-danger);
+}
+
+/* Categories */
+.nwc-categories {
+    margin-bottom: 15px;
+}
+
+.nwc-category {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid var(--nwc-border-color);
+    transition: all 0.3s ease;
+}
+
+.nwc-category:hover {
+    box-shadow: var(--nwc-shadow-lg);
+    border-color: var(--nwc-primary);
+}
+
+.nwc-category-title {
+    font-weight: 600;
+    color: var(--nwc-text-dark);
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+}
+
+.nwc-category-total {
+    float: right;
+    font-weight: 700;
+    color: var(--nwc-primary);
+}
+
+.nwc-category-total.negative {
+    color: var(--nwc-danger);
+}
+
+.nwc-items-list {
+    clear: both;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nwc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.9rem;
+}
+
+.nwc-item:last-child {
+    border-bottom: none;
+}
+
+.nwc-item-name {
+    color: var(--nwc-text-dark);
+    font-weight: 500;
+    flex: 1;
+}
+
+.nwc-item-amount {
+    color: var(--nwc-primary);
+    font-weight: 600;
+    margin: 0 15px;
+    min-width: 100px;
+    text-align: right;
+}
+
+.nwc-liabilities-section .nwc-item-amount {
+    color: var(--nwc-danger);
+}
+
+.nwc-item-delete {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 0 5px;
+    transition: color 0.2s;
+}
+
+.nwc-item-delete:hover {
+    color: var(--nwc-danger);
+}
+
+/* Summary Card */
+.nwc-summary-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 30px;
+    color: white;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.nwc-summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.nwc-summary-label {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    font-weight: 500;
+}
+
+.nwc-summary-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.nwc-summary-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+    margin: 10px 0;
+}
+
+.nwc-summary-divider-thick {
+    height: 2px;
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.nwc-summary-networth {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    margin: 0 -30px -30px -30px;
+    padding: 20px 30px;
+}
+
+.nwc-summary-networth .nwc-summary-label {
+    opacity: 1;
+    font-size: 1rem;
+}
+
+.nwc-summary-networth .nwc-summary-value {
+    font-size: 2.5rem;
+    color: #4ade80;
+}
+
+.nwc-networth-negative .nwc-summary-networth .nwc-summary-value {
+    color: #fca5a5;
+}
+
+.nwc-assets-color {
+    color: #10b981 !important;
+}
+
+.nwc-liabilities-color {
+    color: #ef4444 !important;
+}
+
+/* Charts */
+.nwc-charts-container {
+    margin-bottom: 30px;
+}
+
+.nwc-chart-box {
+    background: var(--nwc-light-bg);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--nwc-border-color);
+}
+
+.nwc-chart-box h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: var(--nwc-text-dark);
+    font-weight: 600;
+}
+
+canvas {
+    max-height: 250px;
+}
+
+/* Actions */
+.nwc-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nwc-actions .btn {
+    padding: 12px 20px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.nwc-actions .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--nwc-shadow-lg);
+}
+
+/* Notifications */
+.nwc-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: var(--nwc-shadow-lg);
+    display: none;
+    z-index: 9999;
+    animation: slideInRight 0.3s ease-out;
+}
+
+.nwc-notification.show {
+    display: block;
+}
+
+.nwc-notification.success {
+    border-left: 4px solid var(--nwc-success);
+    color: var(--nwc-success);
+}
+
+.nwc-notification.error {
+    border-left: 4px solid var(--nwc-danger);
+    color: var(--nwc-danger);
+}
+
+/* Animations */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .nwc-container {
+        padding: 20px;
+    }
+
+    .nwc-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .nwc-calculator-wrapper {
+        padding: 20px 10px;
+    }
+
+    .nwc-container {
+        border-radius: 15px;
+        padding: 15px;
+    }
+
+    .nwc-section {
+        padding: 15px;
+    }
+
+    .nwc-summary-card {
+        padding: 20px;
+    }
+
+    .nwc-title {
+        font-size: 1.75rem;
+        gap: 10px;
+    }
+
+    .nwc-icon {
+        font-size: 2rem;
+    }
+
+    .nwc-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nwc-section-total {
+        margin-top: 10px;
+    }
+
+    .nwc-summary-value {
+        font-size: 1.5rem;
+    }
+
+    .nwc-summary-networth .nwc-summary-value {
+        font-size: 2rem;
+    }
+
+    .nwc-actions {
+        flex-direction: column;
+    }
+
+    .nwc-actions .btn {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .nwc-actions,
+    .nwc-icon {
+        display: none;
+    }
+
+    .nwc-calculator-wrapper {
+        background: white;
+        padding: 0;
+    }
+
+    .nwc-container {
+        box-shadow: none;
+        padding: 0;
+    }
+}
