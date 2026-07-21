@@ -1,7 +1,7 @@
 :root {
-    --nwc-primary: #2563eb;
+    --nwc-primary: #D81E3A;
     --nwc-success: #10b981;
-    --nwc-danger: #ef4444;
+    --nwc-danger: #D81E3A;
     --nwc-warning: #f59e0b;
     --nwc-light-bg: #f9fafb;
     --nwc-border-color: #e5e7eb;
@@ -9,10 +9,13 @@
     --nwc-text-light: #6b7280;
     --nwc-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
     --nwc-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --mm-red: #D81E3A;
+    --mm-dark: #1a1a1a;
+    --mm-light: #f5f5f5;
 }
 
 .nwc-calculator-wrapper {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #D81E3A 0%, #A01529 100%);
     min-height: 100vh;
     padding: 40px 20px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -23,16 +26,26 @@
     color: white;
     margin-bottom: 40px;
     animation: slideDown 0.6s ease-out;
+    padding: 30px 0;
+}
+
+.nwc-brand-label {
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    font-weight: 600;
+    opacity: 0.9;
+    margin-bottom: 5px;
 }
 
 .nwc-title {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 3rem;
+    font-weight: 900;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 15px;
+    letter-spacing: -1px;
 }
 
 .nwc-icon {
@@ -44,6 +57,7 @@
     font-size: 1.1rem;
     opacity: 0.95;
     margin-bottom: 0;
+    font-weight: 400;
 }
 
 .nwc-container {
@@ -67,21 +81,21 @@
 }
 
 .nwc-assets-section {
-    border-color: #dbeafe;
+    border-color: #FFD9E0;
 }
 
 .nwc-assets-section:hover {
-    border-color: var(--nwc-primary);
-    background: rgba(37, 99, 235, 0.02);
+    border-color: #D81E3A;
+    background: rgba(216, 30, 58, 0.02);
 }
 
 .nwc-liabilities-section {
-    border-color: #fee2e2;
+    border-color: #FFD9E0;
 }
 
 .nwc-liabilities-section:hover {
-    border-color: var(--nwc-danger);
-    background: rgba(239, 68, 68, 0.02);
+    border-color: #D81E3A;
+    background: rgba(216, 30, 58, 0.02);
 }
 
 .nwc-section-header {
@@ -109,11 +123,11 @@
 .nwc-section-total {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--nwc-primary);
+    color: #D81E3A;
 }
 
 .nwc-liabilities-section .nwc-section-total {
-    color: var(--nwc-danger);
+    color: #D81E3A;
 }
 
 /* Categories */
@@ -179,7 +193,7 @@
 }
 
 .nwc-item-amount {
-    color: var(--nwc-primary);
+    color: #D81E3A;
     font-weight: 600;
     margin: 0 15px;
     min-width: 100px;
@@ -187,7 +201,7 @@
 }
 
 .nwc-liabilities-section .nwc-item-amount {
-    color: var(--nwc-danger);
+    color: #D81E3A;
 }
 
 .nwc-item-delete {
@@ -206,12 +220,12 @@
 
 /* Summary Card */
 .nwc-summary-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #D81E3A 0%, #A01529 100%);
     border-radius: 15px;
     padding: 30px;
     color: white;
     margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 10px 30px rgba(216, 30, 58, 0.4);
 }
 
 .nwc-summary-item {
@@ -314,6 +328,16 @@ canvas {
 .nwc-actions .btn:hover {
     transform: translateY(-2px);
     box-shadow: var(--nwc-shadow-lg);
+}
+
+.nwc-actions .btn-primary {
+    background-color: #D81E3A;
+    border-color: #D81E3A;
+}
+
+.nwc-actions .btn-primary:hover {
+    background-color: #A01529;
+    border-color: #A01529;
 }
 
 /* Notifications */

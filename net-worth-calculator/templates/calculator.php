@@ -2,10 +2,11 @@
     <div class="container-fluid">
         <!-- Header -->
         <div class="nwc-header">
+            <div class="nwc-brand-label">MINTED MOOLA</div>
             <h1 class="nwc-title">
                 <span class="nwc-icon">💰</span> Net Worth Calculator
             </h1>
-            <p class="nwc-subtitle">Calculate your total net worth by listing your assets and liabilities</p>
+            <p class="nwc-subtitle">Fame. Fortune. The Full Story.</p>
         </div>
 
         <div class="nwc-container">

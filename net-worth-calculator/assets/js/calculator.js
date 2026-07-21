@@ -253,8 +253,8 @@ class NetWorthCalculator {
                 labels: ['Total Assets', 'Total Liabilities'],
                 datasets: [{
                     data: [totalAssets, totalLiabilities],
-                    backgroundColor: ['#10b981', '#ef4444'],
-                    borderColor: ['#059669', '#dc2626'],
+                    backgroundColor: ['#10b981', '#D81E3A'],
+                    borderColor: ['#059669', '#A01529'],
                     borderWidth: 2
                 }]
             },
@@ -277,8 +277,8 @@ class NetWorthCalculator {
                     datasets: [{
                         label: 'Amount ($)',
                         data: assetCategoryData.values,
-                        backgroundColor: '#3b82f6',
-                        borderColor: '#1e40af',
+                        backgroundColor: '#D81E3A',
+                        borderColor: '#A01529',
                         borderWidth: 1
                     }]
                 },
@@ -312,8 +312,8 @@ class NetWorthCalculator {
                     datasets: [{
                         label: 'Amount ($)',
                         data: liabilityCategoryData.values,
-                        backgroundColor: '#ef4444',
-                        borderColor: '#dc2626',
+                        backgroundColor: '#D81E3A',
+                        borderColor: '#A01529',
                         borderWidth: 1
                     }]
                 },
