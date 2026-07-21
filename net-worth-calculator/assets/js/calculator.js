@@ -38,6 +38,19 @@ class NetWorthCalculator {
         this.setupEventListeners();
         this.renderCategories();
         this.updateCalculations();
+        this.initializeModal();
+    }
+
+    initializeModal() {
+        // Pre-initialize modal for smoother opening
+        const modalEl = document.getElementById('categoryModal');
+        if (modalEl && window.bootstrap) {
+            try {
+                this.modalInstance = new window.bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: false });
+            } catch (e) {
+                console.log('Modal pre-init note:', e.message);
+            }
+        }
     }
 
     setupEventListeners() {
@@ -141,32 +154,34 @@ class NetWorthCalculator {
         this.currentItemType = type;
         this.currentItemCategory = category;
 
-        try {
-            const modalEl = document.getElementById('categoryModal');
-            if (!modalEl) {
-                console.error('Modal element not found');
-                return;
+        const title = type === 'assets' ? 'Add New Asset' : 'Add New Liability';
+        document.getElementById('categoryModalLabel').textContent = title;
+
+        const categorySelect = document.getElementById('itemCategory');
+        const categories = type === 'assets' ? this.assetCategories : this.liabilityCategories;
+
+        categorySelect.innerHTML = Object.entries(categories).map(([key, config]) =>
+            `<option value="${key}" ${category === key ? 'selected' : ''}>${config.icon} ${config.label}</option>`
+        ).join('');
+
+        document.getElementById('itemName').value = '';
+        document.getElementById('itemAmount').value = '';
+        document.getElementById('itemAmount').focus();
+
+        // Show modal
+        if (this.modalInstance) {
+            this.modalInstance.show();
+        } else {
+            // Fallback if pre-initialized modal isn't available
+            try {
+                const modalElement = document.getElementById('categoryModal');
+                if (window.bootstrap && window.bootstrap.Modal) {
+                    const modal = new window.bootstrap.Modal(modalElement);
+                    modal.show();
+                }
+            } catch (e) {
+                console.warn('Could not initialize modal:', e);
             }
-
-            const title = type === 'assets' ? 'Add New Asset' : 'Add New Liability';
-            document.getElementById('categoryModalLabel').textContent = title;
-
-            const categorySelect = document.getElementById('itemCategory');
-            const categories = type === 'assets' ? this.assetCategories : this.liabilityCategories;
-
-            categorySelect.innerHTML = Object.entries(categories).map(([key, config]) =>
-                `<option value="${key}" ${category === key ? 'selected' : ''}>${config.icon} ${config.label}</option>`
-            ).join('');
-
-            document.getElementById('itemName').value = '';
-            document.getElementById('itemAmount').value = '';
-
-            // Show modal
-            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-            modal.show();
-        } catch (e) {
-            console.error('Error opening modal:', e);
-            this.showNotification('Error opening form', 'error');
         }
     }
 
