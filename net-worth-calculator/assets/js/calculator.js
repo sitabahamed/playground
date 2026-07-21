@@ -47,6 +47,21 @@ class NetWorthCalculator {
         document.getElementById('exportCsvBtn').addEventListener('click', () => this.exportCSV());
         document.getElementById('resetBtn').addEventListener('click', () => this.resetCalculator());
         document.getElementById('saveItemBtn').addEventListener('click', () => this.saveItem());
+
+        // Event delegation for category add buttons
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('nwc-add-category')) {
+                const type = e.target.dataset.type;
+                const category = e.target.dataset.category;
+                this.quickAddItem(type, category);
+            }
+            if (e.target.classList.contains('nwc-item-delete')) {
+                const type = e.target.dataset.type;
+                const category = e.target.dataset.category;
+                const index = parseInt(e.target.dataset.index);
+                this.deleteItem(type, category, index);
+            }
+        });
     }
 
     renderCategories() {
@@ -96,7 +111,7 @@ class NetWorthCalculator {
             <li class="nwc-item">
                 <span class="nwc-item-name">${item.name}</span>
                 <span class="nwc-item-amount">$${this.formatNumber(item.amount)}</span>
-                <button class="nwc-item-delete" onclick="calculator.deleteItem('${type}', '${key}', ${idx})">
+                <button class="nwc-item-delete" data-type="${type}" data-category="${key}" data-index="${idx}">
                     ×
                 </button>
             </li>
@@ -109,7 +124,7 @@ class NetWorthCalculator {
                     ${hasItems ? `<span class="nwc-category-total">${type === 'assets' ? '+' : ''}$${this.formatNumber(total)}</span>` : ''}
                 </div>
                 ${items.length > 0 ? `<ul class="nwc-items-list">${itemsHTML}</ul>` : '<p style="color: #9ca3af; margin: 0; font-size: 0.9rem;">No items added</p>'}
-                <button class="btn btn-sm btn-outline-secondary mt-2 w-100" onclick="calculator.quickAddItem('${type}', '${key}')">
+                <button class="btn btn-sm btn-outline-secondary mt-2 w-100 nwc-add-category" data-type="${type}" data-category="${key}">
                     Add ${config.label}
                 </button>
             </div>
@@ -126,21 +141,33 @@ class NetWorthCalculator {
         this.currentItemType = type;
         this.currentItemCategory = category;
 
-        const modal = new bootstrap.Modal(document.getElementById('categoryModal'));
-        const title = type === 'assets' ? 'Add New Asset' : 'Add New Liability';
-        document.getElementById('categoryModalLabel').textContent = title;
+        try {
+            const modalEl = document.getElementById('categoryModal');
+            if (!modalEl) {
+                console.error('Modal element not found');
+                return;
+            }
 
-        const categorySelect = document.getElementById('itemCategory');
-        const categories = type === 'assets' ? this.assetCategories : this.liabilityCategories;
+            const title = type === 'assets' ? 'Add New Asset' : 'Add New Liability';
+            document.getElementById('categoryModalLabel').textContent = title;
 
-        categorySelect.innerHTML = Object.entries(categories).map(([key, config]) =>
-            `<option value="${key}" ${category === key ? 'selected' : ''}>${config.icon} ${config.label}</option>`
-        ).join('');
+            const categorySelect = document.getElementById('itemCategory');
+            const categories = type === 'assets' ? this.assetCategories : this.liabilityCategories;
 
-        document.getElementById('itemName').value = '';
-        document.getElementById('itemAmount').value = '';
+            categorySelect.innerHTML = Object.entries(categories).map(([key, config]) =>
+                `<option value="${key}" ${category === key ? 'selected' : ''}>${config.icon} ${config.label}</option>`
+            ).join('');
 
-        modal.show();
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemAmount').value = '';
+
+            // Show modal
+            const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modal.show();
+        } catch (e) {
+            console.error('Error opening modal:', e);
+            this.showNotification('Error opening form', 'error');
+        }
     }
 
     saveItem() {
