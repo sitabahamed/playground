@@ -26,10 +26,15 @@ class NetWorthCalculator {
     }
 
     init() {
+        console.log('NWC: Initializing...');
         this.loadFromStorage();
+        console.log('NWC: Data loaded', this.data);
         this.setupEventListeners();
+        console.log('NWC: Event listeners set up');
         this.renderCategories();
+        console.log('NWC: Categories rendered');
         this.updateCalculations();
+        console.log('NWC: Calculations updated - Init complete!');
     }
 
     setupEventListeners() {
@@ -165,19 +170,22 @@ class NetWorthCalculator {
             <li class="nwc-item">
                 <span class="nwc-item-name">${item.name}</span>
                 <span class="nwc-item-amount">$${this.formatNumber(item.amount)}</span>
-                <button class="nwc-item-delete" data-type="${type}" data-category="${key}" data-index="${idx}">×</button>
+                <button class="nwc-item-delete" data-type="${type}" data-category="${key}" data-index="${idx}" style="cursor:pointer;">×</button>
             </li>
         `).join('');
+
+        const itemsList = items.length > 0 ? `<ul class="nwc-items-list">${itemsHTML}</ul>` : '';
+        const totalDisplay = items.length > 0 ? `<span class="nwc-category-total">$${this.formatNumber(total)}</span>` : '';
 
         return `
             <div class="nwc-category" data-category="${key}">
                 <div class="nwc-category-title">
                     ${config.icon} ${config.label}
-                    ${items.length > 0 ? `<span class="nwc-category-total">$${this.formatNumber(total)}</span>` : ''}
+                    ${totalDisplay}
                 </div>
-                ${items.length > 0 ? `<ul class="nwc-items-list">${itemsHTML}</ul>` : '<p style="color: #9ca3af; margin: 0; font-size: 0.9rem;">No items added</p>'}
-                <button class="btn btn-sm btn-outline-secondary mt-2 w-100 nwc-add-category" data-type="${type}" data-category="${key}">
-                    Add ${config.label}
+                ${itemsList}
+                <button class="btn btn-sm btn-outline-secondary mt-2 w-100 nwc-add-category" data-type="${type}" data-category="${key}" style="cursor:pointer;">
+                    + Add ${config.label}
                 </button>
             </div>
         `;

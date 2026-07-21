@@ -344,10 +344,11 @@ canvas {
 .nwc-quick-add-section {
     background: white;
     border-radius: 12px;
-    padding: 20px;
+    padding: 25px;
     margin-bottom: 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    border: 2px solid #D81E3A;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    border: 3px solid #D81E3A;
+    animation: slideDown 0.4s ease-out;
 }
 
 .nwc-quick-add-header {
