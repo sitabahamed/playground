@@ -1,41 +1,34 @@
-# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 
-# dependencies
-node_modules/
-
-# Expo
-.expo/
-dist/
-web-build/
-expo-env.d.ts
-
-# Native
-.kotlin/
-*.orig.*
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-
-# Metro
-.metro-health-check*
-
-# debug
-npm-debug.*
-yarn-debug.*
-yarn-error.*
-
-# macOS
+# OS
 .DS_Store
-*.pem
+Thumbs.db
 
-# local env files
-.env*.local
+# WordPress / PHP
+wp-content/
+wp-config.php
+wp-config-sample.php
+.htaccess
 
-# typescript
-*.tsbuildinfo
+# Dependencies
+vendor/
+node_modules/
+composer.lock
+package-lock.json
 
-# generated native folders
-/ios
-/android
+# Test artifacts
+coverage/
+.phpunit.result.cache
+
+# Generated files (Phase 2+)
+assets/cache/nw-compare-img/
+
+# Environment
+.env
+.env.local
+.env.*.local
