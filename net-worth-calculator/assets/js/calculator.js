@@ -33,32 +33,17 @@ class NetWorthCalculator {
     }
 
     setupEventListeners() {
-        document.getElementById('addAssetBtn').addEventListener('click', () => this.openModal('assets'));
-        document.getElementById('addLiabilityBtn').addEventListener('click', () => this.openModal('liabilities'));
+        // Export buttons
         document.getElementById('exportPdfBtn').addEventListener('click', () => this.exportPDF());
         document.getElementById('exportCsvBtn').addEventListener('click', () => this.exportCSV());
         document.getElementById('resetBtn').addEventListener('click', () => this.resetCalculator());
-        document.getElementById('saveItemBtn').addEventListener('click', () => this.saveItem());
-        document.getElementById('closeModalBtn').addEventListener('click', () => this.closeModal());
-        document.getElementById('cancelModalBtn').addEventListener('click', () => this.closeModal());
-
-        // Close on overlay click
-        const overlay = document.getElementById('nwc-modal-overlay');
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) this.closeModal();
-        });
-
-        // Enter key to submit
-        document.getElementById('itemAmount').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.saveItem();
-        });
 
         // Category buttons and delete buttons
         document.addEventListener('click', (e) => {
             if (e.target.classList.contains('nwc-add-category')) {
                 const type = e.target.dataset.type;
                 const category = e.target.dataset.category;
-                this.openModal(type, category);
+                this.openForm(type, category);
             }
             if (e.target.classList.contains('nwc-item-delete')) {
                 const type = e.target.dataset.type;
@@ -67,14 +52,21 @@ class NetWorthCalculator {
                 this.deleteItem(type, category, index);
             }
         });
+
+        // Form submission
+        document.getElementById('itemAmount').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.saveItem();
+            }
+        });
     }
 
-    openModal(type, category = null) {
+    openForm(type, category = null) {
         this.currentType = type;
         this.currentCategory = category;
 
         const title = type === 'assets' ? 'Add New Asset' : 'Add New Liability';
-        document.getElementById('categoryModalLabel').textContent = title;
+        document.getElementById('formTitle').textContent = title;
 
         const categorySelect = document.getElementById('itemCategory');
         const categories = type === 'assets' ? this.assetCategories : this.liabilityCategories;
@@ -86,17 +78,18 @@ class NetWorthCalculator {
         document.getElementById('itemName').value = '';
         document.getElementById('itemAmount').value = '';
 
-        document.getElementById('nwc-modal-overlay').classList.add('show');
+        // Show form
+        document.getElementById('quickAddForm').style.display = 'block';
         document.getElementById('itemName').focus();
     }
 
-    closeModal() {
-        document.getElementById('nwc-modal-overlay').classList.remove('show');
+    closeForm() {
+        document.getElementById('quickAddForm').style.display = 'none';
     }
 
     saveItem() {
         const name = document.getElementById('itemName').value.trim();
-        const amount = parseFloat(document.getElementById('itemAmount').value) || 0;
+        const amountStr = document.getElementById('itemAmount').value.trim();
         const category = document.getElementById('itemCategory').value;
 
         if (!name) {
@@ -104,7 +97,13 @@ class NetWorthCalculator {
             return;
         }
 
-        if (amount <= 0) {
+        if (!amountStr) {
+            alert('Please enter an amount');
+            return;
+        }
+
+        const amount = parseFloat(amountStr);
+        if (isNaN(amount) || amount <= 0) {
             alert('Please enter a valid amount');
             return;
         }
@@ -116,8 +115,8 @@ class NetWorthCalculator {
         this.saveToStorage();
         this.renderCategories();
         this.updateCalculations();
-        this.closeModal();
-        this.showNotification(`${name} added!`, 'success');
+        this.closeForm();
+        alert(`✓ ${name} added!`);
     }
 
     deleteItem(type, category, index) {
@@ -128,7 +127,6 @@ class NetWorthCalculator {
         this.saveToStorage();
         this.renderCategories();
         this.updateCalculations();
-        this.showNotification(`${item.name} deleted`, 'success');
     }
 
     renderCategories() {
@@ -209,7 +207,6 @@ class NetWorthCalculator {
     updateCharts(totalAssets, totalLiabilities) {
         if (!window.Chart) return;
 
-        // Breakdown Chart
         this.updateChart('breakdownChart', {
             type: 'doughnut',
             data: {
@@ -224,7 +221,6 @@ class NetWorthCalculator {
             options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'bottom' } } }
         });
 
-        // Assets Chart
         const assetData = this.getChartData('assets');
         if (assetData.labels.length > 0) {
             this.updateChart('assetsChart', {
@@ -237,7 +233,6 @@ class NetWorthCalculator {
             });
         }
 
-        // Liabilities Chart
         const liabData = this.getChartData('liabilities');
         if (liabData.labels.length > 0) {
             this.updateChart('liabilitiesChart', {
@@ -277,7 +272,7 @@ class NetWorthCalculator {
     }
 
     exportPDF() {
-        if (!window.html2pdf) { alert('PDF export not available'); return; }
+        if (!window.html2pdf) { alert('PDF export requires internet connection'); return; }
         const element = document.querySelector('.nwc-container');
         html2pdf().set({ margin: 10, filename: 'net-worth-report.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { orientation: 'portrait', unit: 'mm', format: 'a4' } }).from(element).save();
     }
@@ -307,18 +302,10 @@ class NetWorthCalculator {
         this.saveToStorage();
         this.renderCategories();
         this.updateCalculations();
-        this.showNotification('Calculator reset', 'success');
     }
 
     formatNumber(num) {
         return parseFloat(num).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-
-    showNotification(message, type = 'success') {
-        const notification = document.getElementById('nwc-notification');
-        notification.textContent = message;
-        notification.className = `nwc-notification show ${type}`;
-        setTimeout(() => notification.classList.remove('show'), 3000);
     }
 
     saveToStorage() {
