@@ -38,19 +38,6 @@ class NetWorthCalculator {
         this.setupEventListeners();
         this.renderCategories();
         this.updateCalculations();
-        this.initializeModal();
-    }
-
-    initializeModal() {
-        // Pre-initialize modal for smoother opening
-        const modalEl = document.getElementById('categoryModal');
-        if (modalEl && window.bootstrap) {
-            try {
-                this.modalInstance = new window.bootstrap.Modal(modalEl, { backdrop: 'static', keyboard: false });
-            } catch (e) {
-                console.log('Modal pre-init note:', e.message);
-            }
-        }
     }
 
     setupEventListeners() {
@@ -60,6 +47,15 @@ class NetWorthCalculator {
         document.getElementById('exportCsvBtn').addEventListener('click', () => this.exportCSV());
         document.getElementById('resetBtn').addEventListener('click', () => this.resetCalculator());
         document.getElementById('saveItemBtn').addEventListener('click', () => this.saveItem());
+        document.getElementById('closeModalBtn').addEventListener('click', () => this.closeModal());
+        document.getElementById('cancelModalBtn').addEventListener('click', () => this.closeModal());
+
+        // Close modal when clicking overlay
+        document.getElementById('nwc-modal-overlay').addEventListener('click', (e) => {
+            if (e.target.id === 'nwc-modal-overlay') {
+                this.closeModal();
+            }
+        });
 
         // Event delegation for category add buttons
         document.addEventListener('click', (e) => {
@@ -73,6 +69,13 @@ class NetWorthCalculator {
                 const category = e.target.dataset.category;
                 const index = parseInt(e.target.dataset.index);
                 this.deleteItem(type, category, index);
+            }
+        });
+
+        // Allow Enter key to submit form
+        document.getElementById('itemAmount').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.saveItem();
             }
         });
     }
@@ -166,23 +169,20 @@ class NetWorthCalculator {
 
         document.getElementById('itemName').value = '';
         document.getElementById('itemAmount').value = '';
-        document.getElementById('itemAmount').focus();
 
         // Show modal
-        if (this.modalInstance) {
-            this.modalInstance.show();
-        } else {
-            // Fallback if pre-initialized modal isn't available
-            try {
-                const modalElement = document.getElementById('categoryModal');
-                if (window.bootstrap && window.bootstrap.Modal) {
-                    const modal = new window.bootstrap.Modal(modalElement);
-                    modal.show();
-                }
-            } catch (e) {
-                console.warn('Could not initialize modal:', e);
-            }
-        }
+        const overlay = document.getElementById('nwc-modal-overlay');
+        overlay.classList.add('show');
+
+        // Focus on first input
+        setTimeout(() => {
+            document.getElementById('itemName').focus();
+        }, 100);
+    }
+
+    closeModal() {
+        const overlay = document.getElementById('nwc-modal-overlay');
+        overlay.classList.remove('show');
     }
 
     saveItem() {
@@ -213,7 +213,7 @@ class NetWorthCalculator {
         this.updateCalculations();
         this.showNotification(`${name} added successfully!`, 'success');
 
-        bootstrap.Modal.getInstance(document.getElementById('categoryModal')).hide();
+        this.closeModal();
     }
 
     deleteItem(type, category, index) {

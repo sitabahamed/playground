@@ -109,32 +109,30 @@
     </div>
 </div>
 
-<!-- Modals -->
-<div class="modal fade" id="categoryModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="categoryModalLabel">Add Item</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<!-- Custom Modal Overlay -->
+<div id="nwc-modal-overlay" class="nwc-modal-overlay">
+    <div class="nwc-modal-dialog">
+        <div class="nwc-modal-header">
+            <h3 id="categoryModalLabel">Add Item</h3>
+            <button type="button" class="nwc-modal-close" id="closeModalBtn">&times;</button>
+        </div>
+        <div class="nwc-modal-body">
+            <div class="nwc-form-group">
+                <label for="itemName">Item Name</label>
+                <input type="text" class="nwc-form-input" id="itemName" placeholder="e.g., Savings Account" autocomplete="off">
             </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="itemName" class="form-label">Item Name</label>
-                    <input type="text" class="form-control" id="itemName" placeholder="e.g., Savings Account">
-                </div>
-                <div class="mb-3">
-                    <label for="itemAmount" class="form-label">Amount ($)</label>
-                    <input type="number" class="form-control" id="itemAmount" placeholder="0.00" step="0.01" min="0">
-                </div>
-                <div class="mb-3">
-                    <label for="itemCategory" class="form-label">Category</label>
-                    <select class="form-select" id="itemCategory"></select>
-                </div>
+            <div class="nwc-form-group">
+                <label for="itemAmount">Amount ($)</label>
+                <input type="number" class="nwc-form-input" id="itemAmount" placeholder="0.00" step="0.01" min="0" autocomplete="off">
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveItemBtn">Save Item</button>
+            <div class="nwc-form-group">
+                <label for="itemCategory">Category</label>
+                <select class="nwc-form-input nwc-form-select" id="itemCategory"></select>
             </div>
+        </div>
+        <div class="nwc-modal-footer">
+            <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+            <button type="button" class="btn btn-primary" id="saveItemBtn">Save Item</button>
         </div>
     </div>
 </div>
