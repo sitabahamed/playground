@@ -1,0 +1,88 @@
+.avro-bijoy-admin {
+    margin-top: 20px;
+}
+
+.avro-bijoy-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin: 30px 0;
+}
+
+.converter-box {
+    background: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.converter-box h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.avro-bijoy-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.avro-bijoy-textarea:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 2px rgba(0, 115, 170, 0.2);
+}
+
+.converter-box .button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.converter-box .button:last-child {
+    margin-right: 0;
+}
+
+.avro-bijoy-info {
+    background: #e7f3ff;
+    padding: 20px;
+    border-left: 4px solid #0073aa;
+    border-radius: 5px;
+    margin-top: 30px;
+}
+
+.avro-bijoy-info h3 {
+    margin-top: 0;
+    color: #0073aa;
+}
+
+.avro-bijoy-info code {
+    background: #fff;
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    font-family: 'Courier New', monospace;
+}
+
+.avro-bijoy-info ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.avro-bijoy-info li {
+    margin: 5px 0;
+}
+
+@media (max-width: 900px) {
+    .avro-bijoy-container {
+        grid-template-columns: 1fr;
+    }
+}
